@@ -1,0 +1,10 @@
+namespace TestDll
+{
+    [default_interface]
+    runtimeclass Class
+    {
+        Class();
+        Int32 MyProperty;
+        void TestLogger();
+    }
+}

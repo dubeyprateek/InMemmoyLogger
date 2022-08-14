@@ -1,0 +1,4 @@
+#pragma once
+#define BUFFER_SIZE 256
+#define NUM_BUFFER 255
+#define MIN_ALLOCATIION_SIZE BUFFER_SIZE * BUFFER_SIZE

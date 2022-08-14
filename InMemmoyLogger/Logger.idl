@@ -1,0 +1,11 @@
+namespace InMemmoyLogger
+{
+    [default_interface]
+    runtimeclass Logger
+    {
+        Logger(String name);
+        HRESULT LogCircular(String message);
+        HRESULT LogPersistent(String message);
+        HRESULT ResetPersistentLogs();
+    }
+}
