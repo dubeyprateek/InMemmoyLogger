@@ -8,6 +8,9 @@
     <Filter Include="Generated Files">
       <UniqueIdentifier>{926ab91d-31b4-48c3-b9a4-e681349f27f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Debugger">
+      <UniqueIdentifier>{2ed4059f-eebb-4ca0-a527-fd9fe9e6a717}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -29,6 +32,9 @@
   <ItemGroup>
     <None Include="InMemmoyLogger.def" />
     <None Include="packages.config" />
+    <None Include="InMemoryLogger.js">
+      <Filter>Debugger</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />

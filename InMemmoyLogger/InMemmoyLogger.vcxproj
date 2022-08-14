@@ -141,6 +141,7 @@
     <None Include="InMemmoyLogger.def" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="InMemoryLogger.js" />
     <None Include="packages.config" />
     <None Include="PropertySheet.props" />
     <Text Include="readme.txt">
