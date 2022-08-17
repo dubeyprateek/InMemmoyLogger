@@ -1,4 +1,6 @@
 ﻿"use strict";
+delete Object.prototype.toString;
+delete Array.prototype.toString;
 
 function log(log) {
     host.diagnostics.debugLog(log);
@@ -9,17 +11,19 @@ function hostModule() {
 }
 
 function readString(obj) {
+    //log("readString-0\n");
     var logString = null;
     var array = [];
-    var pointer = host.createPointerObject(obj,"ntdll","WCHAR*");
+    var pointer = host.createPointerObject(obj.address,"ntdll","WCHAR*");
+    //log("readString-1\n");
     var address = pointer.address;
-    for(var i=0; i<256; ++i) 
+    for(var i=0; i<255; ++i) 
     {
         logString = host.memory.readWideString(address);
         array.push(logString);
-        log(logString);
         address = address+256;
     }
+    return array;
 }
 
 function findSymbol(name, allowUndefined) {
@@ -34,18 +38,46 @@ function findSymbol(name, allowUndefined) {
     }
 }
 
-function iterateLLST(gLoggerInstanceList) {
-    var result = [];
-    try {
-
+class synloggerInstance {
+    constructor(instance)
+    {
+        this.CircularLogs = [];
+        this.PersistaneLogs = [];
+        //log("loggerInstance\n");
         var moduleName = hostModule();
+        //log("loggerInstance-1\n");
+        //var loggerInstance = host.createTypedObject(instance.address, moduleName, "LOGGER_INSTANCE");
+        var loggerInstance = instance;
+        //log("loggerInstance-2\n");
+        this.LoggerName = loggerInstance.loggerInstanceName;
+        //log(this.LoggerName);
+        //log("loggerInstance-3\n");
+        this.CircularLogs = readString(loggerInstance.curcularBufferAddress);
+        //log("loggerInstance-4\n");
+        this.PersistaneLogs = readString(loggerInstance.persistantBufferAddress);
+        this.Address = instance.address;
+        this.Type = moduleName+"!"+instance.targetType;
+        //log("loggerInstance-5\n");
+    }
+    toString()
+    {
+        log(this.LoggerName);
+        var name = this.LoggerName;
+        return name;
+    }
+};
+
+function iterateLLST(gLoggerInstanceList) {
+    let result = [];
+    try {
         let head = gLoggerInstanceList.loggerInstanceListEntry;
-        let instance = head.Flink;
+        let instance = head.Flink.address;
         for(var i=0; i<gLoggerInstanceList.nodeCount; ++i)
         {
-            let loggerInstance = host.createTypedObject(instance.address, moduleName, "LOGGER_INSTANCE");
-            result.push(loggerInstance);
-            instance = loggerInstance.loggerInstnace.Flink;
+            let loggerInstance = getInstance(instance);
+            var syninstance = new synloggerInstance(loggerInstance);
+            result.push(syninstance.Name,syninstance);
+            instance = loggerInstance.loggerInstnace.Flink.address;
         }
     }
     catch (e) {
@@ -55,6 +87,7 @@ function iterateLLST(gLoggerInstanceList) {
 }
 
 function showLog() {
+    log("showLog");
     var gLoggerInstanceList = findSymbol("gLoggerInstanceList");
     var loggers = iterateLLST(gLoggerInstanceList);
     return loggers;
@@ -62,6 +95,12 @@ function showLog() {
 
 function getLogger() {
     return findSymbol("gLoggerInstanceList");
+}
+
+function getInstance(instance)
+{
+    var moduleName = hostModule();
+    return host.createTypedObject(instance, moduleName, "LOGGER_INSTANCE");
 }
 
 function initializeScript() {
@@ -78,6 +117,10 @@ function initializeScript() {
         new host.functionAlias(
             getLogger,
             'getLogger'
+        ),
+        new host.functionAlias(
+            getInstance,
+            'getInstance'
         )
     ];
 }
