@@ -2,7 +2,6 @@
 
 function log(log) {
     host.diagnostics.debugLog(log);
-    host.diagnostics.debugLog("\n");
 }
 
 function hostModule() {
@@ -12,14 +11,13 @@ function hostModule() {
 function readString(obj) {
     var logString = null;
     var array = [];
-    log("readString::");
     var pointer = host.createPointerObject(obj,"ntdll","WCHAR*");
     var address = pointer.address;
     for(var i=0; i<256; ++i) 
     {
         logString = host.memory.readWideString(address);
-        log(logString);
         array.push(logString);
+        log(logString);
         address = address+256;
     }
 }
@@ -36,7 +34,7 @@ function findSymbol(name, allowUndefined) {
     }
 }
 
-function iterateLLST(gLoggerInstanceList, targetType) {
+function iterateLLST(gLoggerInstanceList) {
     var result = [];
     try {
 
@@ -58,7 +56,7 @@ function iterateLLST(gLoggerInstanceList, targetType) {
 
 function showLog() {
     var gLoggerInstanceList = findSymbol("gLoggerInstanceList");
-    var loggers = iterateLLST(gLoggerInstanceList, "_LOGGER_INSTANCE *");
+    var loggers = iterateLLST(gLoggerInstanceList);
     return loggers;
 }
 

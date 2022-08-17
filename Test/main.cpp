@@ -13,7 +13,7 @@ using namespace std;
 DWORD WINAPI MyThreadFunction(LPVOID lpParam);
 DWORD WINAPI MyThreadFunction2(LPVOID lpParam);
 
-#define NUM_THREADS 6
+#define NUM_THREADS 20
 #define LOOP_LIMIT MAXULONGLONG
 int main()
 {

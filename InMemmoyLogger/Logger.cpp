@@ -74,10 +74,10 @@ namespace winrt::InMemmoyLogger::implementation
                 goto CleanUp;
             }
             gLoggerInstanceList.AddItemInTheList(&inMemoryLoggerInstance);
-            for (int i = 1; i <= NUM_BUFFER; ++i)
+            for (int i = 0; i < MAXBUFFER_COUNT; ++i)
             {
-                circularLogIndex[ i -1 ] = (PBYTE)circularLogBuffer + i * BUFFER_SIZE;
-                persistentLogIndex[i - 1] = (PBYTE)persistentLogBuffer + i * BUFFER_SIZE;
+                circularLogIndex[i] = (PBYTE)circularLogBuffer + i * BUFFER_SIZE;
+                persistentLogIndex[i] = (PBYTE)persistentLogBuffer + i * BUFFER_SIZE;
             }
             RegisterAddressesWithWER();
         }
@@ -120,7 +120,7 @@ namespace winrt::InMemmoyLogger::implementation
         persistentLogBuffer(NULL),
         circularLogBuffer(NULL),
         maxAllocationSize(0),
-        countCircularBuffer(MAXLONG),
+        countCircularBuffer(LONG_MAX),
         countPersistentBuffer(-1),
         indexPersistentBuffer(0),
         circularLogIndex{NULL},
@@ -137,7 +137,7 @@ namespace winrt::InMemmoyLogger::implementation
 
     VOID Logger::FormatLogMessage(WCHAR outBuffer[BUFFER_SIZE], DWORD bufferSize, const WCHAR* message, LONG messageindex)
     {
-        _snwprintf_s(outBuffer, bufferSize, _TRUNCATE, L"[%d] %s", messageindex, message);
+        _snwprintf_s(outBuffer, bufferSize, _TRUNCATE, L"[%llu] %s", GetTickCount64(), message);
     }
 
     VOID Logger::PrintMessagesInTheDebugger(const WCHAR* message)
@@ -146,7 +146,6 @@ namespace winrt::InMemmoyLogger::implementation
         {
             OutputDebugStringW(message);
             YieldProcessor();
-            OutputDebugStringW(L"\n");
         }
     }
     HRESULT Logger::LogInternal(LogType logType, hstring const& message)
@@ -157,37 +156,30 @@ namespace winrt::InMemmoyLogger::implementation
         {
         case winrt::InMemmoyLogger::implementation::LogType::LOGTYPE_CIRCULAR:
         {
-            //volatile LONG currentIndex = InterlockedIncrement(&countCircularBuffer);
-            volatile LONG currentIndex = countCircularBuffer++;
+            volatile LONG currentIndex = InterlockedIncrement(&countCircularBuffer);
             if (currentIndex < 0)
             {
-                //2147483647L
-                //-2147483648L
-                currentIndex = currentIndex + LONG_MAX + 2 ;
-                auto distance = LONG_MAX % (NUM_BUFFER - 1);
-                currentIndex = (currentIndex + distance) % (NUM_BUFFER - 1);
+                // 2147483647L = LONG_MAX
+                // -2147483648L = LONG_MAX+1
+                currentIndex = currentIndex + LONG_MAX + 1 ;
+                auto distance = LONG_MAX % (MAXBUFFER_COUNT);
+                currentIndex = (currentIndex + distance) % (MAXBUFFER_COUNT);
             }
             else {
-                currentIndex = currentIndex % (NUM_BUFFER - 1);
+                currentIndex = currentIndex % (MAXBUFFER_COUNT);
             }
-
-            PVOID currentMemoryLocation = circularLogIndex[currentIndex];
-            ZeroMemory(currentMemoryLocation, BUFFER_SIZE-1);
-            YieldProcessor();
-            Write(currentIndex, currentMemoryLocation, message.c_str());
+            Write(currentIndex, message.c_str(), logType);
         }
         break;
         case winrt::InMemmoyLogger::implementation::LogType::LOGTYPE_PERSITENT:
         {
             EnterCriticalSection(&csProtectInstance);
-            volatile LONG maxIndex = maxAllocationSize / BUFFER_SIZE;
+            volatile LONG maxIndex = (maxAllocationSize / BUFFER_SIZE) -1;
             volatile LONG currentIndex = InterlockedIncrement(&countPersistentBuffer);
-            currentIndex %= NUM_BUFFER - 1;
+            currentIndex %= MAXBUFFER_COUNT;
             if (indexPersistentBuffer < maxIndex)
             {
-                PVOID currentMemoryLocation = persistentLogIndex[currentIndex];
-                ZeroMemory(currentMemoryLocation, BUFFER_SIZE-1);
-                Write(currentIndex, currentMemoryLocation, message.c_str());
+                Write(currentIndex, message.c_str(), logType);
                 indexPersistentBuffer++;
             }
             else
@@ -205,14 +197,31 @@ namespace winrt::InMemmoyLogger::implementation
         return result;
     }
 
-    void Logger::Write(LONG index, const PVOID& currentMemoryLocation, const WCHAR*  messageBuffer)
+    void Logger::Write(LONG index, const WCHAR*  messageBuffer, LogType logType)
     {
         WCHAR  message[BUFFER_SIZE] = L"";
+        PVOID currentMemoryLocation = NULL;
         FormatLogMessage(message, BUFFER_SIZE, messageBuffer, index);
-        PrintMessagesInTheDebugger(message);
-        wcsncpy_s((TCHAR*)currentMemoryLocation,
-            BUFFER_SIZE - 1,
-            message,
-            BUFFER_SIZE - 1);
+        
+        switch (logType)
+        {
+        case winrt::InMemmoyLogger::implementation::LogType::LOGTYPE_CIRCULAR:
+            currentMemoryLocation  = circularLogIndex[index];
+            break;
+        case winrt::InMemmoyLogger::implementation::LogType::LOGTYPE_PERSITENT:
+            currentMemoryLocation = persistentLogIndex[index];
+            break;
+        default:
+            break;
+        }
+
+        if (currentMemoryLocation) 
+        {
+            ZeroMemory(currentMemoryLocation, BUFFER_SIZE);
+            wcsncpy_s((TCHAR*)currentMemoryLocation,
+                BUFFER_SIZE,
+                message,
+                BUFFER_SIZE);
+        }
     }
 }
