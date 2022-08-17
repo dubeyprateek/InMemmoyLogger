@@ -44,8 +44,8 @@ namespace winrt::InMemmoyLogger::implementation
         PVOID               circularLogBuffer                           ;
         int                 maxAllocationSize                           ;
         BOOL                isInitialized                               ;
-        PVOID               circularLogIndex[NUM_BUFFER-1]              ;
-        PVOID               persistentLogIndex[NUM_BUFFER-1]            ;
+        PVOID               circularLogIndex[MAXBUFFER_COUNT]              ;
+        PVOID               persistentLogIndex[MAXBUFFER_COUNT]            ;
         CRITICAL_SECTION    csProtectInstance                           ;
     };
 }

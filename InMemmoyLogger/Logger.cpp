@@ -40,8 +40,13 @@ namespace winrt::InMemmoyLogger::implementation
     {
         // We don't care about the failure of these functions. 
         // If they are succesful the memory dump will contain information to search the logs.
-        WerRegisterMemoryBlock(circularLogBuffer, maxAllocationSize);
-        WerRegisterMemoryBlock(persistentLogBuffer, maxAllocationSize);
+        if (circularLogBuffer) {
+            WerRegisterMemoryBlock(circularLogBuffer, maxAllocationSize);
+        }
+        if (persistentLogBuffer) {
+            WerRegisterMemoryBlock(persistentLogBuffer, maxAllocationSize);
+        }
+
         WerRegisterMemoryBlock(&gLoggerInstanceList, sizeof(LOGGER_LIST));
         return S_OK;
     }
