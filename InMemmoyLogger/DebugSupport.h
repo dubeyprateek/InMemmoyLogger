@@ -49,7 +49,7 @@ typedef struct _LOGGER_LIST {
 		EnterCriticalSection(&csLoggerListLock);
 		InsertHeadList(&loggerInstanceListEntry, &newItem->loggerInstnace);
 		nodeCount++;
-		WerRegisterMemoryBlock(&newItem->loggerInstnace, sizeof(PLOGGER_INSTANCE));
+		WerRegisterMemoryBlock(&newItem->loggerInstnace, sizeof(LOGGER_INSTANCE));
 		LeaveCriticalSection(& csLoggerListLock);
 	}
 } LOGGER_LIST, *PLOGGER_LIST;
