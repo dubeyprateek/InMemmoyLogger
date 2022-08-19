@@ -79,7 +79,7 @@ function iterateLLST(gLoggerInstanceList) {
         {
             let loggerInstance = getInstance(instance);
             var syninstance = new synloggerInstance(loggerInstance);
-            result.push(syninstance.Name,syninstance);
+            result.push(syninstance);
             instance = loggerInstance.loggerInstnace.Flink.address;
         }
     }
