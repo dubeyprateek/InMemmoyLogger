@@ -64,9 +64,7 @@ class synloggerInstance {
     }
     toString()
     {
-        log(this.LoggerName);
-        var name = this.LoggerName;
-        return name;
+        return this.LoggerName;
     }
 };
 
