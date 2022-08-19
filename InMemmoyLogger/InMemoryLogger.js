@@ -15,13 +15,26 @@ function readString(obj) {
     var array = [];
     var pointer = host.createPointerObject(obj.address,"ntdll","CHAR*");
     var address = pointer.address;
-    for(var i=0; i<255; ++i) 
+    for(var i=0; i<256; ++i) 
     {
         logString = host.memory.readString(address);
         array.push(logString);
         address = address+256;
     }
     return array;
+}
+
+
+function printLogs(obj) {
+    var logString = null;
+    var array = [];
+    var pointer = host.createPointerObject(obj, "ntdll", "CHAR*");
+    var address = pointer.address;
+    for (var i = 0; i < 256; ++i) {
+        logString = host.memory.readString(address);
+        log(logString);
+        address = address + 256;
+    }
 }
 
 function findSymbol(name, allowUndefined) {
@@ -97,15 +110,15 @@ function initializeScript() {
         new host.apiVersionSupport(1, 3),
         new host.functionAlias(
             showLog,
-            'showLog'
+            'Logs'
         ),
         new host.functionAlias(
-            readString,
-            'readLog'
+            printLogs,
+            'printLogs'
         ),
         new host.functionAlias(
             getLogger,
-            'getLogger'
+            'getLoggers'
         ),
         new host.functionAlias(
             getInstance,
