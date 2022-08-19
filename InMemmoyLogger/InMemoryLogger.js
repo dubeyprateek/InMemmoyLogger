@@ -11,11 +11,9 @@ function hostModule() {
 }
 
 function readString(obj) {
-    //log("readString-0\n");
     var logString = null;
     var array = [];
-    var pointer = host.createPointerObject(obj.address,"ntdll","WCHAR*");
-    //log("readString-1\n");
+    var pointer = host.createPointerObject(obj.address,"ntdll","CHAR*");
     var address = pointer.address;
     for(var i=0; i<255; ++i) 
     {
@@ -43,21 +41,13 @@ class synloggerInstance {
     {
         this.CircularLogs = [];
         this.PersistaneLogs = [];
-        //log("loggerInstance\n");
         var moduleName = hostModule();
-        //log("loggerInstance-1\n");
-        //var loggerInstance = host.createTypedObject(instance.address, moduleName, "LOGGER_INSTANCE");
         var loggerInstance = instance;
-        //log("loggerInstance-2\n");
         this.LoggerName = loggerInstance.loggerInstanceName;
-        //log(this.LoggerName);
-        //log("loggerInstance-3\n");
         this.CircularLogs = readString(loggerInstance.curcularBufferAddress);
-        //log("loggerInstance-4\n");
         this.PersistaneLogs = readString(loggerInstance.persistantBufferAddress);
         this.Address = instance.address;
         this.Type = moduleName+"!"+instance.targetType;
-        //log("loggerInstance-5\n");
     }
     toString()
     {
@@ -87,7 +77,6 @@ function iterateLLST(gLoggerInstanceList) {
 }
 
 function showLog() {
-    log("showLog");
     var gLoggerInstanceList = findSymbol("gLoggerInstanceList");
     var loggers = iterateLLST(gLoggerInstanceList);
     return loggers;
