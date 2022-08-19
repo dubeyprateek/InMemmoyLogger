@@ -56,7 +56,7 @@ class synloggerInstance {
         this.PersistaneLogs = [];
         var moduleName = hostModule();
         var loggerInstance = instance;
-        this.LoggerName = loggerInstance.loggerInstanceName;
+        this.LoggerName = host.memory.readWideString(loggerInstance.loggerInstanceName.address);
         this.CircularLogs = readString(loggerInstance.curcularBufferAddress);
         this.PersistaneLogs = readString(loggerInstance.persistantBufferAddress);
         this.Address = instance.address;
