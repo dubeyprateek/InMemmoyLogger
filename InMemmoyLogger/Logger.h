@@ -31,7 +31,7 @@ namespace winrt::InMemmoyLogger::implementation
         BOOL IsInstanceIntialized();
         VOID FormatLogMessage(CHAR* outBuffer, DWORD bufferSize,
             hstring const& message, LONG messageindex);
-        VOID PrintMessagesInTheDebugger(const WCHAR* message);
+        VOID PrintMessagesInTheDebugger(const CHAR* message);
         HRESULT LogInternal(LogType logType, hstring const& message);
         VOID Write(LONG Index, hstring const& message, LogType logType);
         VOID InitializeLogMemory(hstring const& name);
@@ -44,8 +44,8 @@ namespace winrt::InMemmoyLogger::implementation
         PVOID               circularLogBuffer                           ;
         int                 maxAllocationSize                           ;
         BOOL                isInitialized                               ;
-        PVOID               circularLogIndex[MAXBUFFER_COUNT]              ;
-        PVOID               persistentLogIndex[MAXBUFFER_COUNT]            ;
+        PVOID               circularLogIndex[MAXBUFFER_COUNT]           ;
+        PVOID               persistentLogIndex[MAXBUFFER_COUNT]         ;
         CRITICAL_SECTION    csProtectInstance                           ;
     };
 }

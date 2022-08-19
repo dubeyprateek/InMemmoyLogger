@@ -125,7 +125,7 @@ namespace winrt::InMemmoyLogger::implementation
         persistentLogBuffer(NULL),
         circularLogBuffer(NULL),
         maxAllocationSize(0),
-        countCircularBuffer(LONG_MAX),
+        countCircularBuffer(-1),
         countPersistentBuffer(-1),
         indexPersistentBuffer(0),
         circularLogIndex{NULL},
@@ -143,13 +143,16 @@ namespace winrt::InMemmoyLogger::implementation
     VOID Logger::FormatLogMessage(CHAR* outBuffer, DWORD bufferSize, hstring const& message, LONG messageindex)
     {
         _snprintf_s(outBuffer, bufferSize, _TRUNCATE, "[%llu] %s", GetTickCount64(), to_string(message).c_str());
+        PrintMessagesInTheDebugger(outBuffer);
     }
 
-    VOID Logger::PrintMessagesInTheDebugger(const WCHAR* message)
+    VOID Logger::PrintMessagesInTheDebugger(const CHAR* message)
     {
         if (IsDebuggerPresent())
         {
-            OutputDebugStringW(message);
+            EnterCriticalSection(&csProtectInstance);
+            OutputDebugStringA(message);
+            LeaveCriticalSection(&csProtectInstance);
             YieldProcessor();
         }
     }
