@@ -15,7 +15,7 @@ function readString(obj) {
     var address = pointer.address;
     for(var i=0; i<256; ++i) 
     {
-        logString = host.memory.readWideString(address);
+        logString = host.memory.readString(address);
         array.push(logString);
         log(logString);
         address = address+256;

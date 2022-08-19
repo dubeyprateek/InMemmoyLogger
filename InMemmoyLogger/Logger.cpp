@@ -140,9 +140,9 @@ namespace winrt::InMemmoyLogger::implementation
         return isInitialized;
     }
 
-    VOID Logger::FormatLogMessage(WCHAR outBuffer[BUFFER_SIZE], DWORD bufferSize, const WCHAR* message, LONG messageindex)
+    VOID Logger::FormatLogMessage(CHAR* outBuffer, DWORD bufferSize, hstring const& message, LONG messageindex)
     {
-        _snwprintf_s(outBuffer, bufferSize, _TRUNCATE, L"[%llu] %s", GetTickCount64(), message);
+        _snprintf_s(outBuffer, bufferSize, _TRUNCATE, "[%llu] %s", GetTickCount64(), to_string(message).c_str());
     }
 
     VOID Logger::PrintMessagesInTheDebugger(const WCHAR* message)
@@ -173,7 +173,7 @@ namespace winrt::InMemmoyLogger::implementation
             else {
                 currentIndex = currentIndex % (MAXBUFFER_COUNT);
             }
-            Write(currentIndex, message.c_str(), logType);
+            Write(currentIndex, message, logType);
         }
         break;
         case winrt::InMemmoyLogger::implementation::LogType::LOGTYPE_PERSITENT:
@@ -184,7 +184,7 @@ namespace winrt::InMemmoyLogger::implementation
             currentIndex %= MAXBUFFER_COUNT;
             if (indexPersistentBuffer < maxIndex)
             {
-                Write(currentIndex, message.c_str(), logType);
+                Write(currentIndex, message, logType);
                 indexPersistentBuffer++;
             }
             else
@@ -202,11 +202,12 @@ namespace winrt::InMemmoyLogger::implementation
         return result;
     }
 
-    void Logger::Write(LONG index, const WCHAR*  messageBuffer, LogType logType)
+    void Logger::Write(LONG index, hstring const& message, LogType logType)
     {
-        WCHAR  message[BUFFER_SIZE] = L"";
+        CHAR  formattedMessage[BUFFER_SIZE] = "";
         PVOID currentMemoryLocation = NULL;
-        FormatLogMessage(message, BUFFER_SIZE, messageBuffer, index);
+
+        FormatLogMessage(formattedMessage, BUFFER_SIZE, message, index);
         
         switch (logType)
         {
@@ -222,11 +223,8 @@ namespace winrt::InMemmoyLogger::implementation
 
         if (currentMemoryLocation) 
         {
-            ZeroMemory(currentMemoryLocation, BUFFER_SIZE);
-            wcsncpy_s((TCHAR*)currentMemoryLocation,
-                BUFFER_SIZE,
-                message,
-                BUFFER_SIZE);
+            //ZeroMemory(currentMemoryLocation, BUFFER_SIZE);
+            CopyMemory((CHAR*)currentMemoryLocation, formattedMessage, BUFFER_SIZE);
         }
     }
 }

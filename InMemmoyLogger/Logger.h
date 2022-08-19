@@ -29,11 +29,11 @@ namespace winrt::InMemmoyLogger::implementation
     private:
         HRESULT RegisterAddressesWithWER();
         BOOL IsInstanceIntialized();
-        VOID FormatLogMessage(WCHAR outBuffer[BUFFER_SIZE], DWORD bufferSize,
-            const WCHAR* messageBuffer, LONG messageindex);
+        VOID FormatLogMessage(CHAR* outBuffer, DWORD bufferSize,
+            hstring const& message, LONG messageindex);
         VOID PrintMessagesInTheDebugger(const WCHAR* message);
         HRESULT LogInternal(LogType logType, hstring const& message);
-        VOID Write(LONG Index, const WCHAR*  messageBuffer, LogType logType);
+        VOID Write(LONG Index, hstring const& message, LogType logType);
         VOID InitializeLogMemory(hstring const& name);
 
     private:
