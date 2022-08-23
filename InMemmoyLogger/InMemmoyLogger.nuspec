@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>InMemmoyLogger.APX.Microsoft</id>
+    <version>1.0.0</version>
+    <title>InMemmoyLogger</title>
+    <authors>APX.Microsoft</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <!-- <icon>icon.png</icon> -->
+    <description>InMemmoyLogger</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>InMemmoyLogger Logger</tags>
+  </metadata>
+	<files>
+		<!-- WinMd and IntelliSense -->
+		<file src="..\x64\Debug\InMemmoyLogger\InMemmoyLogger.winmd" target="lib\uap10.0"/>
+		<file src="..\x64\Debug\InMemmoyLogger\InMemmoyLogger.xml" target="lib\uap10.0"/>
+
+		<!-- DLLs and resources -->
+		<file src="..\ARM\Debug\InMemmoyLogger\InMemmoyLogger.dll" target="runtimes\win10-arm\native"/>
+		<file src="..\ARM\Debug\InMemmoyLogger\InMemmoyLogger.pri" target="runtimes\win10-arm\native"/>
+		<file src="..\ARM64\Debug\InMemmoyLogger\InMemmoyLogger.dll" target="runtimes\win10-arm64\native"/>
+		<file src="..\ARM64\Debug\InMemmoyLogger\InMemmoyLogger.pri" target="runtimes\win10-arm64\native"/>
+		<file src="..\x64\Debug\InMemmoyLogger\InMemmoyLogger.dll" target="runtimes\win10-x64\native"/>
+		<file src="..\x64\Debug\InMemmoyLogger\InMemmoyLogger.pri" target="runtimes\win10-x64\native"/>
+		<file src="..\Debug\InMemmoyLogger\InMemmoyLogger.dll" target="runtimes\win10-x86\native"/>
+		<file src="..\Debug\InMemmoyLogger\InMemmoyLogger.pri" target="runtimes\win10-x86\native"/>
+
+		<!-- .targets -->
+		<file src="InMemmoyLogger.APX.Microsoft.targets" target="build\native"/>
+
+	</files>
+</package>

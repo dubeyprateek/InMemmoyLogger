@@ -13,7 +13,7 @@ using namespace std;
 DWORD WINAPI MyThreadFunction(LPVOID lpParam);
 DWORD WINAPI MyThreadFunction2(LPVOID lpParam);
 
-#define NUM_THREADS 20
+#define NUM_THREADS 50
 #define LOOP_LIMIT MAXULONGLONG
 int main()
 {
@@ -64,7 +64,7 @@ DWORD WINAPI MyThreadFunction(LPVOID lpParam)
         logger->LogCircular(wostringstream.str());
 
         wostringstream << L"ThreadID [" << GetCurrentThreadId() << L"] Persistent Loop count [" << i << L"]" << endl;
-        logger->LogPersistent(wostringstream.str());
+        //logger->LogPersistent(wostringstream.str());
     }
     return 0;
 }
@@ -80,7 +80,7 @@ DWORD WINAPI MyThreadFunction2(LPVOID lpParam)
         std::wostringstream wostringstream ;
         wostringstream << L"ThreadID [" << GetCurrentThreadId() << L"] Circular Loop count [" << i << L"]" << endl;
         logger.LogCircular(wostringstream.str());
-        logger.LogPersistent(wostringstream.str());
+        //logger.LogPersistent(wostringstream.str());
     }
     return 0;
 }
