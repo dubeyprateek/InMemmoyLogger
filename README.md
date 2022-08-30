@@ -42,11 +42,6 @@ Logger will expose two kinds of memory storage for the logs.
 2. Persistent log buffer.
   1. This will not be overwritten. Once its full the calls to log more data will fail.
 
-#
-
-# Repository
-
-[InMemmoyLogger - Repos (azure.com)](https://dev.azure.com/microsoft/Apps/_git/InMemmoyLogger)
 
 # Log Message
 
