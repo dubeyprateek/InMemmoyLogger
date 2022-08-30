@@ -1,55 +1,5 @@
 # Lightweight in-memory logging
 
-# Table of Contents
-
-[Authors 1](#_Toc112687915)
-
-[Program manager 2](#_Toc112687916)
-
-[Objective 2](#_Toc112687917)
-
-[Proposal 2](#_Toc112687918)
-
-[Use cases 2](#_Toc112687919)
-
-[Details 2](#_Toc112687920)
-
-[Repository 3](#_Toc112687921)
-
-[Log Message 3](#_Toc112687922)
-
-[Memory dump support. 3](#_Toc112687923)
-
-[Debugger extension 3](#_Toc112687924)
-
-[Basic design 3](#_Toc112687925)
-
-[Persistent storage 4](#_Toc112687926)
-
-[Circular buffer 4](#_Toc112687927)
-
-[Logger instances 4](#_Toc112687928)
-
-[In memory view 4](#_Toc112687929)
-
-[Class instance in memory 4](#_Toc112687930)
-
-[Log changing in memory 5](#_Toc112687931)
-
-[ABI definition 6](#_Toc112687932)
-
-[Debugger extension 6](#_Toc112687933)
-
-[Distribution 7](#_Toc112687934)
-
-[A use case 7](#_Toc112687935)
-
-# Authors
-
-1. Prateek Kumar Dubey
-2. Kenny Guo
-
-# Program manager
 
 # Objective
 
