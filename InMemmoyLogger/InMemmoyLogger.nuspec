@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package >
   <metadata>
-    <id>InMemmoyLogger.APX.Microsoft</id>
+    <id>InMemmoyLogger</id>
     <version>1.0.0</version>
     <title>InMemmoyLogger</title>
-    <authors>APX.Microsoft</authors>
+    <authors>PKD</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <!-- <icon>icon.png</icon> -->
