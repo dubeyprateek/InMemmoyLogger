@@ -1,30 +1,14 @@
 # Lightweight in-memory logging
 
+# How to use it.
 
-# Objective
+Dll
+The project can be refereneced or the WinRT component can be linked. The Test project demonstrates how to use the dll.
 
-Many apps either have no logging or ETW based logging. These loggings are not helpful when debugging the crash dumps and hang dumps and Watson instances.
-
-Why ETW logging is not very useful for retail scenarios:
-
-1. ETW logging is more often file based. There are two ways to get the logs.
-  1. Request the users to turn on the logging and share the log file.
-  2. Auto turn on the logging.
-    1. ETW sessions on Windows are limited. Turning on logging for common apps is not a good idea.
-    2. Watson needs to be made aware so that logs can be injected into the etl files collected by the Watson.
-    3. Analysis of ETW logs is complicated and time consuming.
-2. Each application will need its own unique provider and applications implement their own logging support. It is difficult to maintain.
-
-# Proposal
-
-- Create an in-memory logger module and publish it as a nuget for different applications.
-- Create a debugger extension that can extract the logs from the memory dump.
-
-# Use cases
-
-Many of our apps have telemetry and ETW logging. For instance, Apps on demand have ETW based logging, but it is not beneficial to debug crashes. We are observing several memory dumps, but it is not possible to deduce the events that lead to the crash.
-
-Similar situation is also be seen in apps like notepad that don't have logging support. In case of hang and crash sometimes it's not possible to root cause it only based on the information available with the callstack.
+Debugger script.
+Run following commands in the windbg
+.scriptload <path>\InMemoryLogger.js
+!Logs
 
 # Details
 
