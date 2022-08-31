@@ -7,8 +7,10 @@ The project can be refereneced or the WinRT component can be linked. The Test pr
 
 Debugger script.
 Run following commands in the windbg
-.scriptload <path>\InMemoryLogger.js
-!Logs
+
+1. .scriptload <path>\InMemoryLogger.js
+
+2. !Logs
 
 # Details
 
