@@ -51,6 +51,33 @@ namespace winrt::InMemmoyLogger::implementation
         return S_OK;
     }
 
+    winrt::hresult Logger::ResetPersistentLogs()
+    {
+        if (IsInstanceIntialized())
+        {
+            EnterCriticalSection(&csProtectInstance);
+            countPersistentBuffer = -1;
+            indexPersistentBuffer = 0;
+            ZeroMemory(persistentLogBuffer, maxAllocationSize);
+            LeaveCriticalSection(&csProtectInstance);
+        }
+        return S_OK;
+    }
+
+    Logger::Logger(hstring const& name) : isInitialized(FALSE),
+        persistentLogBuffer(NULL),
+        circularLogBuffer(NULL),
+        maxAllocationSize(0),
+        countCircularBuffer(-1),
+        countPersistentBuffer(-1),
+        indexPersistentBuffer(0),
+        circularLogIndex{ NULL },
+        persistentLogIndex{ NULL }
+    {
+        InitializeCriticalSection(&csProtectInstance);
+        InitializeLogMemory(name);
+    }
+
     VOID Logger::InitializeLogMemory(hstring const& name)
     {
         DWORD allocationFlags = MEM_COMMIT;
@@ -108,39 +135,12 @@ namespace winrt::InMemmoyLogger::implementation
         return;
     }
 
-    winrt::hresult Logger::ResetPersistentLogs()
-    {
-        if (IsInstanceIntialized()) 
-        {
-            EnterCriticalSection(&csProtectInstance);
-            countPersistentBuffer = -1;
-            indexPersistentBuffer = 0;
-            ZeroMemory(persistentLogBuffer, maxAllocationSize);
-            LeaveCriticalSection(&csProtectInstance);
-        }
-        return S_OK;
-    }
-
-    Logger::Logger(hstring const& name) : isInitialized(FALSE),
-        persistentLogBuffer(NULL),
-        circularLogBuffer(NULL),
-        maxAllocationSize(0),
-        countCircularBuffer(-1),
-        countPersistentBuffer(-1),
-        indexPersistentBuffer(0),
-        circularLogIndex{NULL},
-        persistentLogIndex{NULL}
-    {
-        InitializeCriticalSection(&csProtectInstance);
-        InitializeLogMemory(name);
-    }
-
     BOOL Logger::IsInstanceIntialized()
     {
         return isInitialized;
     }
 
-    VOID Logger::FormatLogMessage(CHAR* outBuffer, DWORD bufferSize, hstring const& message, LONG messageindex)
+    VOID Logger::FormatLogMessage(CHAR* outBuffer, DWORD bufferSize, hstring const& message)
     {
         _snprintf_s(outBuffer, bufferSize, _TRUNCATE, "[%llu] %s", GetTickCount64(), to_string(message).c_str());
         PrintMessagesInTheDebugger(outBuffer);
@@ -210,7 +210,7 @@ namespace winrt::InMemmoyLogger::implementation
         CHAR  formattedMessage[BUFFER_SIZE] = "";
         PVOID currentMemoryLocation = NULL;
 
-        FormatLogMessage(formattedMessage, BUFFER_SIZE, message, index);
+        FormatLogMessage(formattedMessage, BUFFER_SIZE, message);
         
         switch (logType)
         {
@@ -226,7 +226,6 @@ namespace winrt::InMemmoyLogger::implementation
 
         if (currentMemoryLocation) 
         {
-            //ZeroMemory(currentMemoryLocation, BUFFER_SIZE);
             CopyMemory((CHAR*)currentMemoryLocation, formattedMessage, BUFFER_SIZE);
         }
     }

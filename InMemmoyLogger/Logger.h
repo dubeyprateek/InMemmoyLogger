@@ -7,8 +7,6 @@
 using namespace concurrency;
 using namespace std;
 
-
-
 namespace winrt::InMemmoyLogger::implementation
 {
     enum class LogType
@@ -19,22 +17,22 @@ namespace winrt::InMemmoyLogger::implementation
 
     struct Logger : LoggerT<Logger>
     {
-        Logger() = default;
-        Logger(hstring const& name);
+        Logger() = default                                              ;
+        Logger(hstring const& name)                                     ;
 
-        winrt::hresult LogCircular(hstring const& message);
-        winrt::hresult LogPersistent(hstring const& message);
-        winrt::hresult ResetPersistentLogs();
+        winrt::hresult LogCircular(hstring const& message)              ;
+        winrt::hresult LogPersistent(hstring const& message)            ;
+        winrt::hresult ResetPersistentLogs()                            ;
 
     private:
-        HRESULT RegisterAddressesWithWER();
-        BOOL IsInstanceIntialized();
+        HRESULT RegisterAddressesWithWER()                              ;
+        BOOL IsInstanceIntialized()                                     ;
         VOID FormatLogMessage(CHAR* outBuffer, DWORD bufferSize,
-            hstring const& message, LONG messageindex);
-        VOID PrintMessagesInTheDebugger(const CHAR* message);
-        HRESULT LogInternal(LogType logType, hstring const& message);
-        VOID Write(LONG Index, hstring const& message, LogType logType);
-        VOID InitializeLogMemory(hstring const& name);
+            hstring const& message)                                     ;
+        VOID PrintMessagesInTheDebugger(const CHAR* message)            ;
+        HRESULT LogInternal(LogType logType, hstring const& message)    ;
+        VOID Write(LONG Index, hstring const& message, LogType logType) ;
+        VOID InitializeLogMemory(hstring const& name)                   ;
 
     private:
         volatile LONG       countCircularBuffer                         ;

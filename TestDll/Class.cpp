@@ -21,6 +21,7 @@ namespace winrt::TestDll::implementation
     }
     void Class::MyProperty(int32_t value)
     {
+        UNREFERENCED_PARAMETER(value);
         throw hresult_not_implemented();
     }
     void Class::TestLogger()
@@ -31,10 +32,10 @@ namespace winrt::TestDll::implementation
 
         for (ULONGLONG i = 0; i < LOOP_LIMIT; ++i)
         {
-            std::wostringstream wostringstream;
-            wostringstream << L"TestDLLThreadID [" << GetCurrentThreadId() << L"] Circular Loop count [" << i << L"]" << endl;
-            logger.LogCircular(wostringstream.str());
-            //logger.LogPersistent(wostringstream.str());
+            std::wostringstream wostringstreamloop;
+            wostringstreamloop << L"TestDLLThreadID [" << GetCurrentThreadId() << L"] Circular Loop count [" << i << L"]" << endl;
+            logger.LogCircular(wostringstreamloop.str());
+            logger.LogPersistent(wostringstreamloop.str());
         }
     }
 }

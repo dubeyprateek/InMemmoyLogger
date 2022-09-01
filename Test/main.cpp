@@ -34,7 +34,7 @@ int main()
             NULL,                   // default security attributes
             0,                      // use default stack size  
             MyThreadFunction,       // thread function name
-            &logger,          // argument to thread function 
+            &logger,                // argument to thread function 
             0,                      // use default creation flags 
             &dwThreadIdArray[i]);   // returns the thread identifier 
     }
@@ -44,8 +44,8 @@ int main()
         threadHandles[i] = CreateThread(
             NULL,                   // default security attributes
             0,                      // use default stack size  
-            MyThreadFunction2,       // thread function name
-            &logger,          // argument to thread function 
+            MyThreadFunction2,      // thread function name
+            NULL,                   // argument to thread function 
             0,                      // use default creation flags 
             &dwThreadIdArray[i]);   // returns the thread identifier 
     }
@@ -64,23 +64,24 @@ DWORD WINAPI MyThreadFunction(LPVOID lpParam)
         logger->LogCircular(wostringstream.str());
 
         wostringstream << L"ThreadID [" << GetCurrentThreadId() << L"] Persistent Loop count [" << i << L"]" << endl;
-        //logger->LogPersistent(wostringstream.str());
+        logger->LogPersistent(wostringstream.str());
     }
     return 0;
 }
 
 DWORD WINAPI MyThreadFunction2(LPVOID lpParam)
 {
+    UNREFERENCED_PARAMETER(lpParam);
     std::wostringstream wostringstream;
     wostringstream << L"ThreadID [" << GetCurrentThreadId() << L"]" << endl;
     InMemmoyLogger::Logger logger(wostringstream.str());
     
     for (ULONGLONG i = 0; i < LOOP_LIMIT; ++i)
     {
-        std::wostringstream wostringstream ;
-        wostringstream << L"ThreadID [" << GetCurrentThreadId() << L"] Circular Loop count [" << i << L"]" << endl;
-        logger.LogCircular(wostringstream.str());
-        //logger.LogPersistent(wostringstream.str());
+        std::wostringstream wostringstreamloop ;
+        wostringstreamloop << L"ThreadID [" << GetCurrentThreadId() << L"] Circular Loop count [" << i << L"]" << endl;
+        logger.LogCircular(wostringstreamloop.str());
+        logger.LogPersistent(wostringstreamloop.str());
     }
     return 0;
 }

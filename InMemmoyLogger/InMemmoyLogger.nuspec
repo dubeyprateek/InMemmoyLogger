@@ -29,7 +29,7 @@
 		<file src="..\Debug\InMemmoyLogger\InMemmoyLogger.pri" target="runtimes\win10-x86\native"/>
 
 		<!-- .targets -->
-		<file src="InMemmoyLogger.APX.Microsoft.targets" target="build\native"/>
+		<file src="InMemmoyLogger.targets" target="build\native"/>
 
 	</files>
 </package>
