@@ -1,48 +1,34 @@
-# Lightweight in-memory logging
+# Lightweight lock free in-memory logging with memory dump and windbg support for debugging
 
 # How to use it.
-
-Dll
-The project can be refereneced or the WinRT component can be linked. The Test project demonstrates how to use the dll.
-
-Debugger script.
-Run following commands in the windbg
-
-1. .scriptload <path>\InMemoryLogger.js
-
-2. !Logs
+Build the Dll and use it as a Win/RT providor in your application.
 
 # Details
+Logger is lightweight and fast.
 
-Logger should be lightweight and fast.
-
-1. Logger would use 64KB in memory-based events in a round robin manner.
-2. The size of each event will be limited to 256 bytes. It will allow 256 events in the memory.
+1. Logger uses 64KB in memory-based events in a round robin manner.
+2. The size of each event is limited to 256 bytes. It will allow 256 events in the memory.
 3. Allocated memory will be contagious so that traversal can be index based.
 4. Circular logging will support multithread logging but it will be lockless and contention free.
 
-Logger will expose two kinds of memory storage for the logs.
-
+Logger exposes two kinds of memory storage for the logs.
 1. Circular log buffer.
   1. This buffer will be overwritten once its full.
 2. Persistent log buffer.
   1. This will not be overwritten. Once its full the calls to log more data will fail.
 
-
 # Log Message
-
-The event will contain two parts
-
+The event contains two parts
 1. Tick count – It will help in log stitching and ordering.
 2. Formatted log message.
 
 # Memory dump support.
-
 This logger will register a memory stream with a crash handler to push the data in the memory dumps.
 
 # Debugger extension
-
-Debugger extension will print the logs in the debugger
+Run following commands in the windbg
+1. .scriptload <path>\InMemoryLogger.js
+2. !Logs
 
 # Basic design
 
@@ -50,19 +36,18 @@ Debugger extension will print the logs in the debugger
 
 ### Persistent storage
 
-64KB buffer that applications can use to store the information that they want to remain available in the crash dumps. For example: Applications like notepad can store the information about application setting and file information that user is trying to open.
+64KB buffer that applications can use to store the information that they want to remain available in the crash dumps. Applications can store the information about application setting or any other logs that they want to see in the crash dumps..
 
 ### Circular buffer
 
 64KB buffer that applications can use to store the logs. The logs will be overwritten in a circular way such that once the buffer is full the first entry will be overwritten in a circular fashion.
 
 # Logger instances
+Logger supports multiple instances. Multiple binaries can choose to either share or instantiate their own logger instance for logging.
 
-Logger will support multiple instances. Multiple binaries can choose to either share or instantiate their own logger instance for logging.
+For example this logger can be used by a library for its own internal logging and the application that using this library can also use another instance of the logger for application specific logging.
 
-For example this logger can be used by a library such as Apps on demand for its own internal logging and the application that using this library can also use another instance of the logger for application specific logging.
-
-All the log instances are changed to each-other. They all will be registered with Windows error reporting to be collected in the memory dumps. The debugger extension will walk the chain of the loggers and present readable and clickable view of the logger.
+All the log instances are chained / connected to each-other. They all will be registered with Windows error reporting to be collected in the memory dumps. The debugger extension will walk the chain of the loggers and present readable and clickable view of the logger.
 
 ## In memory view
 
