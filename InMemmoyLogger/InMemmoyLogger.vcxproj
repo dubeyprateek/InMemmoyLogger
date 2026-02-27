@@ -7,15 +7,15 @@
     <CppWinRTGenerateWindowsMetadata>true</CppWinRTGenerateWindowsMetadata>
     <MinimalCoreWin>true</MinimalCoreWin>
     <ProjectGuid>{de9b2fea-f04d-42de-8402-c410a20156d6}</ProjectGuid>
-    <ProjectName>InMemmoyLogger</ProjectName>
-    <RootNamespace>InMemmoyLogger</RootNamespace>
+    <ProjectName>InMemoryLogger</ProjectName>
+    <RootNamespace>InMemoryLogger</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
     <ApplicationType>Windows Store</ApplicationType>
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
     <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0</WindowsTargetPlatformVersion>
-    <WindowsTargetPlatformMinVersion>10.0.22000.0</WindowsTargetPlatformMinVersion>
+    <WindowsTargetPlatformMinVersion>10.0.26100.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <ItemGroup Label="ProjectConfigurations">
@@ -101,7 +101,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <ModuleDefinitionFile>InMemmoyLogger.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>InMemoryLogger.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -139,7 +139,7 @@
     <Midl Include="Logger.idl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="InMemmoyLogger.def" />
+    <None Include="InMemoryLogger.def" />
   </ItemGroup>
   <ItemGroup>
     <None Include="InMemoryLogger.js" />

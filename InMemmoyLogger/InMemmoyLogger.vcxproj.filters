@@ -28,7 +28,7 @@
     <Midl Include="Logger.idl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="InMemmoyLogger.def" />
+    <None Include="InMemoryLogger.def" />
     <None Include="packages.config" />
     <None Include="InMemoryLogger.js">
       <Filter>Debugger</Filter>

@@ -5,7 +5,7 @@
 #include <Windows.h>
 #include<Memoryapi.h>
 #include <sstream>
-#include"winrt/InMemmoyLogger.h"
+#include"winrt/InMemoryLogger.h"
 
 using namespace winrt;
 using namespace Windows::Foundation;
@@ -28,7 +28,7 @@ namespace winrt::TestDll::implementation
     {
         std::wostringstream wostringstream;
         wostringstream << L"TestDLL-ThreadID [" << GetCurrentThreadId() << L"]" << endl;
-        InMemmoyLogger::Logger logger(wostringstream.str());
+        InMemoryLogger::Logger logger(wostringstream.str());
 
         for (ULONGLONG i = 0; i < LOOP_LIMIT; ++i)
         {

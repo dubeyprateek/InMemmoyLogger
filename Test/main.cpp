@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include<Memoryapi.h>
 #include <sstream>
-#include"winrt/InMemmoyLogger.h"
+#include"winrt/InMemoryLogger.h"
 #include"winrt/TestDll.h"
 
 using namespace winrt;
@@ -22,7 +22,7 @@ int main()
     printf("Hello, %ls!\n", uri.AbsoluteUri().c_str());
 
     TestDll::Class objClass;
-    InMemmoyLogger::Logger logger(L"FirstInstance");
+    InMemoryLogger::Logger logger(L"FirstInstance");
     HANDLE threadHandles[NUM_THREADS];
     DWORD dwThreadIdArray[NUM_THREADS];
 
@@ -56,7 +56,7 @@ int main()
 
 DWORD WINAPI MyThreadFunction(LPVOID lpParam)
 {
-    InMemmoyLogger::Logger* logger = (InMemmoyLogger::Logger*)lpParam;
+    InMemoryLogger::Logger* logger = (InMemoryLogger::Logger*)lpParam;
     for (ULONGLONG i = 0; i < LOOP_LIMIT; ++i)
     {
         std::wostringstream wostringstream;
@@ -74,7 +74,7 @@ DWORD WINAPI MyThreadFunction2(LPVOID lpParam)
     UNREFERENCED_PARAMETER(lpParam);
     std::wostringstream wostringstream;
     wostringstream << L"ThreadID [" << GetCurrentThreadId() << L"]" << endl;
-    InMemmoyLogger::Logger logger(wostringstream.str());
+    InMemoryLogger::Logger logger(wostringstream.str());
     
     for (ULONGLONG i = 0; i < LOOP_LIMIT; ++i)
     {

@@ -1,4 +1,4 @@
-namespace InMemmoyLogger
+namespace InMemoryLogger
 {
     [default_interface]
     runtimeclass Logger

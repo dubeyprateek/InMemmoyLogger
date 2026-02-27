@@ -6,7 +6,7 @@
 #include "List.h"
 
 extern LOGGER_LIST gLoggerInstanceList;
-namespace winrt::InMemmoyLogger::implementation
+namespace winrt::InMemoryLogger::implementation
 {
     winrt::hresult Logger::LogCircular(hstring const& message)
     {
@@ -162,7 +162,7 @@ namespace winrt::InMemmoyLogger::implementation
 
         switch (logType)
         {
-        case winrt::InMemmoyLogger::implementation::LogType::LOGTYPE_CIRCULAR:
+        case winrt::InMemoryLogger::implementation::LogType::LOGTYPE_CIRCULAR:
         {
             volatile LONG currentIndex = InterlockedIncrement(&countCircularBuffer);
             if (currentIndex < 0)
@@ -179,7 +179,7 @@ namespace winrt::InMemmoyLogger::implementation
             Write(currentIndex, message, logType);
         }
         break;
-        case winrt::InMemmoyLogger::implementation::LogType::LOGTYPE_PERSITENT:
+        case winrt::InMemoryLogger::implementation::LogType::LOGTYPE_PERSITENT:
         {
             EnterCriticalSection(&csProtectInstance);
             volatile LONG maxIndex = (maxAllocationSize / BUFFER_SIZE) -1;
@@ -214,10 +214,10 @@ namespace winrt::InMemmoyLogger::implementation
         
         switch (logType)
         {
-        case winrt::InMemmoyLogger::implementation::LogType::LOGTYPE_CIRCULAR:
+        case winrt::InMemoryLogger::implementation::LogType::LOGTYPE_CIRCULAR:
             currentMemoryLocation  = circularLogIndex[index];
             break;
-        case winrt::InMemmoyLogger::implementation::LogType::LOGTYPE_PERSITENT:
+        case winrt::InMemoryLogger::implementation::LogType::LOGTYPE_PERSITENT:
             currentMemoryLocation = persistentLogIndex[index];
             break;
         default:

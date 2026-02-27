@@ -7,7 +7,7 @@
 using namespace concurrency;
 using namespace std;
 
-namespace winrt::InMemmoyLogger::implementation
+namespace winrt::InMemoryLogger::implementation
 {
     enum class LogType
     {
@@ -47,7 +47,7 @@ namespace winrt::InMemmoyLogger::implementation
         CRITICAL_SECTION    csProtectInstance                           ;
     };
 }
-namespace winrt::InMemmoyLogger::factory_implementation
+namespace winrt::InMemoryLogger::factory_implementation
 {
     struct Logger : LoggerT<Logger, implementation::Logger>
     {
